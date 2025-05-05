@@ -1,34 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import {InputCheckbox, InputDefault} from "./ui/inputs/input.jsx";
+import {ButtonDefault} from "./ui/buttons/button.jsx";
+import {Form} from "./components/form/form.jsx";
+import {useRef, useState} from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const handleSubmit = (e) => {e.preventDefault();};
+    const loginEmailRef = useRef(null);
+    const loginPasswordRef = useRef(null);
+    const registerEmailRef = useRef(null);
+    const registerPasswordRef = useRef(null);
+    const [loginField, setLoginField] = useState(false);
+
+    function nextInput(e, nextRef) {
+        if (e.key === "Enter" && nextRef.current && e.target.value !== "") {
+            nextRef.current.focus();
+        }
+    }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <section>
+        <h2>UseRef & UseState</h2>
+
+
+        <main>
+            <Form title="Login" handleSubmit={handleSubmit}>
+                <InputDefault placeholder={"Enter your email"} type={"email"} onChange={(e) => {setLoginField(e.target.value !== "")}} ref={loginEmailRef} onKeyDown={(e) => nextInput(e,loginPasswordRef)} />
+                <InputDefault placeholder={"Enter your password"} type={"password"} ref={loginPasswordRef}/>
+                <InputCheckbox text={"Lorem ipsum dolor sit."}/>
+                <ButtonDefault buttonText={"Login"}/>
+            </Form>
+
+            {
+                loginField === false &&
+                    <Form title="Register" handleSubmit={handleSubmit}>
+                        <InputDefault placeholder={"Enter your email"} type={"email"} ref={registerEmailRef} onKeyDown={(e)=> nextInput(e,registerPasswordRef)}/>
+                        <InputDefault placeholder={"Enter your password"} type={"password"} ref={registerPasswordRef}/>
+                        <InputCheckbox text={"Lorem ipsum dolor sit."}/>
+                        <ButtonDefault buttonText={"Register"}/>
+                    </Form>
+            }
+        </main>
+
+
+        <span>@Kuretao</span>
+    </section>
   )
 }
 
